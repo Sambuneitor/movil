@@ -1,7 +1,13 @@
-//valor inicial null; useAuth() valida que esta dentro del provider (linea 11)
+/**Archivo de contexto global de autenticacion
+ * restaura la sesion guardada al iniciar la app (token, usuario)
+ * expone las funciones de login, register, logout, actualizar perfil
+ * cualquier componente que se necesite saber si es usuario esta logueado usa un hook useAuth() en lugar de leer el AsyncStorage directamente
+*/
 
-import { useCallback, useContext } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import authService from '../services/authService';
 
+//valor inicial null; useAuth() valida que esta dentro del provider
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
