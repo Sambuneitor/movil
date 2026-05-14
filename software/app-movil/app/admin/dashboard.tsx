@@ -134,18 +134,18 @@ export default function AdminDashboardScreen() {
   // Array de objetos StatCard que definen cada tarjeta del grid.
   // El campo 'show' controla si la tarjeta se renderiza o no.
   // La tarjeta de 'Usuarios' solo se muestra a administradores (show: isAdmin).
-  const cards: StatCard[] = [
+const cards: StatCard[] = [
     { title: 'Categorías',    value: stats.categorias,    icon: 'folder-outline',      gradient: ['#667eea', '#764ba2'], route: '/admin/productos', show: true },
     { title: 'Subcategorías', value: stats.subcategorias, icon: 'folder-open-outline', gradient: ['#06b6d4', '#0891b2'], route: '/admin/productos', show: true },
     { title: 'Productos',     value: stats.productos,     icon: 'cube-outline',        gradient: ['#10b981', '#059669'], route: '/admin/productos', show: true },
     { title: 'Usuarios',      value: stats.usuarios,      icon: 'people-outline',      gradient: ['#f59e0b', '#d97706'], route: '/admin/usuarios',  show: isAdmin }, // Solo admin.
     { title: 'Pedidos',       value: stats.pedidos,       icon: 'cart-outline',        gradient: ['#6b7280', '#4b5563'], route: '/admin/pedidos',   show: true },
     { title: 'Pendientes',    value: stats.pendientes,    icon: 'time-outline',        gradient: ['#ef4444', '#dc2626'], route: '/admin/pedidos',   show: true },
-  ];
+];
 
   // ── HELPER: formateador de moneda ─────────────────────────────────────────
   // Convierte un número a formato de pesos colombianos. Ej: 45000 → "$45.000"
-  const fmt = (n: number) => `$${Number(n).toLocaleString('es-CO')}`;
+const fmt = (n: number) => `$${Number(n).toLocaleString('es-CO')}`;
 
   // ── RENDERIZADO PRINCIPAL ─────────────────────────────────────────────────
   return (
@@ -384,6 +384,3 @@ const styles = StyleSheet.create({
   infoText: { color: '#444', fontSize: 14 },
 });
 
-
-
-} 
