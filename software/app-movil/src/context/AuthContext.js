@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
     //JWT recibido del backend; su precencia indica sesion activa
     const [token, setToken] = useState(null);
     //true mientras se lee asyncStorage al arrancar; evita redirigir antes de tiempo 
-    const [isLoading, setLoading] = useState(true);
+    const [isLoadingSession, setIsLoadingSession] = useState(true);
 
     /**
      * restoreSession
@@ -31,7 +31,7 @@ export function AuthProvider({ children }) {
             setUser(session?.user || null);
         } finally {
             //siempre marca la carga como terminada, aunque falle la lectura
-            setIsLoadingsession(false);
+            setIsLoadingSession(false);
         }
     }, []);
 
@@ -98,14 +98,14 @@ export function AuthProvider({ children }) {
             user, //objeto del usuario autenticado o null
             token, //JWT o null
             isAuthenticated: Boolean(token), //Booleano derivado del token
-            isLoadingsession, //true mientras se restaura la sesion
+            isLoadingSession, //true mientras se restaura la sesion
             login,
             register,
             logout,
             updatePerfil,
             refreshSession: restoreSession, //permite forzar una re-lectura del storage 
         }),
-        [user, token, isLoadingsession, login, register, logout, updatePerfil, restoreSession]
+        [user, token, isLoadingSession, login, register, logout, updatePerfil, restoreSession]
     );
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

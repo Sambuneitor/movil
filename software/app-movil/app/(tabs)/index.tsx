@@ -15,7 +15,7 @@
 
 
 //manejo de variables de estado local
-import { useState, useEffect,useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 //importar componentes 
 //Dimensions optiene al ancho y alto de la pantalla para hacer diseños responsivos
 //flatlist lista optomizada con virtualizacion para mostrar grandes cantidades de datos
@@ -28,9 +28,9 @@ import { Ionicons } from "@expo/vector-icons";
 //CatalogoService servicio que hace las llamadas HTTP (API) del backend para productos y categorias
 import  catalogoService  from "../../src/services/catalogoService";
 //themedText : texto q aplica colores del tema del dispositivo de manera automatica claro u oscuro
-import { ThemedText } from "@/components/themed-text";
+import { ThemedText } from "../../components/themed-text";
 //themedView : color de fondo automatico segun el tema del dispositivo
-import { ThemedView } from "@/components/themed-View";
+import { ThemedView } from "../../components/themed-view";
 //useCarrito hook del contexto del carrito para agregar productos
 import { useCarrito } from '../../src/context/CarritoContext';
 
@@ -173,7 +173,7 @@ export default function HomeScreen() {
     //productos filtrados subconjunto de prodcutos que coinciden con la busqueda y categoria
     const productosFiltrados = useMemo (() => {
         const termino = busqueda.trim().toLowerCase();// normaliza el texto
-        return productosFiltrados.filter((p: any) => {
+        return productos.filter((p: any) => {
             //coincideTexto el producto tiene el termino en su nombre descripcion 
             const coincideTexto = 
             termino === '' ||

@@ -51,7 +51,7 @@ const routerPush = (path: string) => (router as unknown as { push: (p: string) =
 const routerReplace = (path: string) => (router as unknown as { replace: (p: string) => void }).replace(path);
 
 //fmt: formatea un numero como precio en pesos colombianos eje fmt (15000) -> $15.000
-const fmt = (n: number) => `$${Number(n).toLocaleString('es-Co')}`;
+const fmt = (n: number) => `$${Number(n).toLocaleString('es-CO')}`;
 
 //componente principal carrito Screen
 export default function CarritoScreen() {

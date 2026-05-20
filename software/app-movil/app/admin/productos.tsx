@@ -19,7 +19,7 @@ import { ActivityIndicator, Alert, FlatList, Image, Pressable,ScrollView, StyleS
 
 //lee los parametros de la url para obtener el id del pedido 
 import { router } from "expo-router"; //negacion y parametros de ruta 
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '../../components/themed-text';
 import  apiClient  from '../../src/api/apiClient';
 import { activarProducto, desactivarProducto, deleteProduct, } from '../../src/services/adminService';
 import { useAuth } from '../../src/context/AuthContext'
@@ -84,7 +84,7 @@ export default function AdminProductosScreen() {
             const productosData: Producto[] = res.data?.data?.productos || [];
             setProductos(productosData);
             setPagina(page);
-            setTotalPaginas(res.data?.data.paginacion?.totalPaginas || 1);
+            setTotalPaginas(res.data?.data?.paginacion?.totalPaginas || 1);
         } catch (error: unknown) {
             setErrorMessage((error as { message?: string })?.message || 'Error al cargar productos');
         } finally {

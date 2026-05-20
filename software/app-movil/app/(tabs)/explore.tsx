@@ -26,9 +26,9 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from '../../src/context/AuthContext';
 //themedText : texto q aplica colores del tema del dispositivo de manera automatica claro u oscuro
-import { ThemedText } from "@/components/themed-text";
+import { ThemedText } from "../../components/themed-text";
 //themedView : color de fondo automatico segun el tema del dispositivo
-import { ThemedView } from "@/components/themed-View";
+import { ThemedView } from "../../components/themed-view";
 
 /**
  * AuthCtx define la forma del objeto devuelto por useAuth es necesario
@@ -58,7 +58,7 @@ const routerPush = (path: string) => (router as unknown as {push: (p: string) =>
 
 //componente principal del tad de cuenta
 export default function TabTwoScreen() {
-    const { user, isAuthenticated, logout, login, register, isLoadingSession, updatePerfil } = useAuth() as unknown as AuthCtx;
+    const { user, isAuthenticated, logout, login, register, isLoading, updatePerfil } = useAuth() as unknown as AuthCtx;
     //estado del formulario login y registro 
     //isRegisterMode true mostrar formulario de registro false mostrar login
     const [isRegisterMode, setIsRegisterMode] = useState(false);
@@ -107,7 +107,7 @@ export default function TabTwoScreen() {
         setApellido('');
         setTelefono('');
         setDireccion('');
-        setIsRegisterMode('');
+        setIsRegisterMode(false);
         setErrorMessage('');
         setSuccesMessage('');
     };
@@ -220,7 +220,7 @@ export default function TabTwoScreen() {
     // ── PANTALLA DE CARGA DE SESIÓN ──────────────────────────────────────────
   // Se muestra brevemente al abrir la app mientras se verifica si hay
   // un token de sesión guardado en el almacenamiento local del dispositivo.
-    if (isLoadingSession) {
+    if (isLoading) {
     return (
         <View style={styles.centered}>
         <ActivityIndicator size="large" />

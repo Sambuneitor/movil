@@ -17,7 +17,7 @@ import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, TextInput, View } from "react-native";
 
 //lee los parametros de la url para obtener el id del pedido 
-import { ThemedText } from '@/components/themed-text';
+import { ThemedText } from '../../components/themed-text';
 import  apiClient  from '../../src/api/apiClient';
 import { activarUsuario, desactivarUsuario, deleteUsuario, } from '../../src/services/usuarioAdminService';
 import { useAuth } from '../../src/context/AuthContext'

@@ -14,14 +14,14 @@ import carritoService from '../services/carritoService';
 const CarritoContext = createContext(null);
 
 export function CarritoProvider({ children}) {
-    //lee isAuthenticated e isloadingSession del contexto de autenticacion
+    //lee isAuthenticated e isLoadingSession del contexto de autenticacion
     const { isAuthenticated, isLoadingSession } = useAuth();
 
     //estado del carrito
-    const [items, setItems] = useSate([]); //lista de productos en el carrito
-    const [totalItems, setTotalItems] = useSate([0]); //suma de cantidades 
-    const [total, setTotal] = useSate(0); //precio total
-    const [loading, setLoading] = useSate(true); // true mientras carga el carrito
+    const [items, setItems] = useState([]); //lista de productos en el carrito
+    const [totalItems, setTotalItems] = useState(0); //suma de cantidades 
+    const [total, setTotal] = useState(0); //precio total
+    const [loading, setLoading] = useState(true); // true mientras carga el carrito
 
     //rastrea si el usuario estaba autenticado en el render anterior para detectar en el momento exacto de inicio de sesion
     const prevAuthenticated = useRef(false);
@@ -60,7 +60,7 @@ export function CarritoProvider({ children}) {
         try {
             //getCarrito decide inernamente si consulta el backend o asyncStorage
             const snapshot = await carritoService.getCarrito(isAuthenticated);
-            setItems(snapshot.setItems);
+            setItems(snapshot.items);
             setTotalItems(snapshot.totalItems);
             setTotal(snapshot.total);
         } catch {
@@ -109,7 +109,7 @@ export function CarritoProvider({ children}) {
 
     const eliminarItem = useCallback(
         async (itemId) => {
-            await carritoService, removeItem({ isAuthenticated, itemId });
+            await carritoService.removeItem({ isAuthenticated, itemId });
         },
         [hydrate, isAuthenticated]
     );

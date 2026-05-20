@@ -15,7 +15,7 @@ import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from
 //navegacion de expo router 
 import { router } from "expo-router";
 //biblioteca de iconos de react
-import { Ionicons } from "@/expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 //cliente http axios con JWT
 import apiClient from '../../src/api/apiClient';
 //autenticacion
@@ -80,7 +80,7 @@ export default function AdminDashboardScreen() {
                 const [cats, subs, prods, orders] = await Promise.all([
                     apiClient.get('/admin/categorias'),
                     apiClient.get('/admin/subcategorias'),
-                    apiClient.get('/admin/productos? limite=1'), //por que solo se necesita el total
+                    apiClient.get('/admin/productos?limite=1'), //por que solo se necesita el total
                     apiClient.get('/admin/pedidos/estadisticas'),
                 ]);
 

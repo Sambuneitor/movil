@@ -9,19 +9,19 @@ import { Tabs } from 'expo-router';
 //react es nevesario para que JSX funcione correctamente
 import React from 'react';
 //hapticTab version personalizada del boton de la pestaña que agrega vibracion tactil (haptic feedback) al precionar el tab
-import { HapticTab } from '@/components/haptic-tab';
+import { HapticTab } from '../../components/haptic-tab';
 //IconSymbols componente que muestra iconos SF symbols IOS y material de android
-import { IconSymbol } from '@components/ui/icon-symbol';
+import { IconSymbol } from '../../components/ui/icon-symbol';
 //colors objeto de colores del tema de app modo claro y oscuro
-import { Colors } from '@/constants/theme';
+import { Colors } from '../../constants/theme';
 //useColorScheme hook que detecta si el dispositivo esta en modo claro u obscuro
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useColorScheme } from '../../hooks/use-color-scheme';
 
 //TabLayout comoponente principal que configura toda la barra de navegacion
 //exp router lo exporta como default y no lo monta automaticamente 
 export default function TabLayout() {
     //ColorScheme valor 'light' o 'dark' segun la preferencia del sistema 
-    const colorSheme = useColorScheme();
+    const colorScheme = useColorScheme();
 
     return (
         //Tabs renderiza la barra de pestañas inferior y gestiona que la pantalla este activa en cada momento
@@ -29,7 +29,7 @@ export default function TabLayout() {
             screenOptions = {{
                 //tabBarActiveTintColor color del icono y texto de la pestaña activa 
                 //si colorScheme es null (no detectado) usa light por defecto
-                tabBarActiveTintColor: Colors[colorSheme ?? 'light'].tint,
+                tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
                 //headerShown false oculta el encabezado superior en todas las pantallas 
                 headerShown: false,
                 //tabBarButton remplaza el boton estandar por hapticTab con vibracion 
