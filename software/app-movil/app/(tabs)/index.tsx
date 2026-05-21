@@ -241,7 +241,7 @@ export default function HomeScreen() {
       {/* ScrollView horizontal: permite deslizar las tarjetas sin ocultar otras */}
         <ScrollView
         horizontal
-        showsHorizontalScrollIndicator={false} // Oculta la barra de scroll horizontal.
+        showsHorizontalScrollIndicator={false} /* Oculta la barra de scroll horizontal. */
         contentContainerStyle={styles.featuresRow}>
         {/* Genera una tarjeta por cada entrada en FEATURES */}
         {FEATURES.map((f) => (
@@ -262,7 +262,7 @@ export default function HomeScreen() {
         <TextInput
             placeholder="Buscar productos..."
             value={busqueda}
-          onChangeText={setBusqueda}       // Actualiza busqueda en cada keystroke.
+          onChangeText={setBusqueda}       /* Actualiza busqueda en cada keystroke. */
             style={styles.searchInput}
             placeholderTextColor="#9ca3af"
         />
@@ -293,7 +293,7 @@ export default function HomeScreen() {
         {categorias.map((cat: any) => (
             <Pressable
             key={cat.id}
-            onPress={() => setCategoriaActiva(String(cat.id))} // Guarda el ID como string.
+            onPress={() => setCategoriaActiva(String(cat.id))} /* Guarda el ID como string. */
             style={[styles.chip, categoriaActiva === String(cat.id) && styles.chipActive]}>
             <ThemedText style={[styles.chipText, categoriaActiva === String(cat.id) && styles.chipTextActive]}>
                 {cat.nombre}
@@ -337,7 +337,7 @@ export default function HomeScreen() {
         {/* Botón "Anterior": desactivado en la primera página */}
         <Pressable
             style={[styles.pagBtn, paginaActual === 1 && styles.pagBtnDisabled]}
-          onPress={() => setPaginaActual((p) => Math.max(1, p - 1))} // No baja de la página 1.
+          onPress={() => setPaginaActual((p) => Math.max(1, p - 1))} /* No baja de la página 1. */
             disabled={paginaActual === 1}>
             <Ionicons name="chevron-back" size={15} color={paginaActual === 1 ? '#d1d5db' : '#6366f1'} />
             <ThemedText style={[styles.pagBtnText, paginaActual === 1 && styles.pagBtnTextDisabled]}>
@@ -351,7 +351,7 @@ export default function HomeScreen() {
         {/* Botón "Siguiente": desactivado en la última página */}
         <Pressable
             style={[styles.pagBtn, paginaActual === totalPaginas && styles.pagBtnDisabled]}
-          onPress={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))} // No supera el total.
+          onPress={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))} /* No supera el total. */
             disabled={paginaActual === totalPaginas}>
             <ThemedText style={[styles.pagBtnText, paginaActual === totalPaginas && styles.pagBtnTextDisabled]}>
             Siguiente
@@ -380,7 +380,7 @@ export default function HomeScreen() {
         <Image
         source={{ uri: catalogoService.buildImageUrl(producto.imagen) }}
         style={styles.cardImage}
-        resizeMode="cover" // Recorta la imagen para que llene el espacio sin deformarse.
+        resizeMode="cover" /* Recorta la imagen para que llene el espacio sin deformarse. */
         />
       {/* Badge de categoría superpuesto sobre la imagen (position: absolute) */}
         <View style={styles.cardBadge}>
@@ -451,7 +451,7 @@ export default function HomeScreen() {
       {/* animationType="slide": el modal sube desde la parte inferior de la pantalla. */}
         <Modal
         visible={Boolean(productoDetalle)}
-        transparent                          // El fondo semitransparente se ve detrás.
+        transparent /* El fondo semitransparente se ve detrás. */
         animationType="slide"
         onRequestClose={() => setProductoDetalle(null)}> {/* Cierra con el botón "atrás" de Android */}
         {/* Fondo semitransparente negro que cubre toda la pantalla */}

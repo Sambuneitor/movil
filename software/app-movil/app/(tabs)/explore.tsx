@@ -264,8 +264,8 @@ export default function TabTwoScreen() {
           {/* Campo de correo: compartido entre login y registro */}
             <TextInput
             placeholder="Correo *"
-            autoCapitalize="none"        // No convierte a mayúsculas el primer caracter.
-            keyboardType="email-address" // Muestra teclado con @ y .com fácilmente.
+            autoCapitalize="none"        /* No convierte a mayúsculas el primer caracter. */
+            keyboardType="email-address" /* Muestra teclado con @ y .com fácilmente. */
             value={email}
             onChangeText={setEmail}
             style={styles.input}
@@ -274,7 +274,7 @@ export default function TabTwoScreen() {
           {/* Campo de contraseña: texto oculto con puntos */}
             <TextInput
             placeholder="Contrasena *"
-            secureTextEntry               // Oculta el texto ingresado.
+            secureTextEntry               /* Oculta el texto ingresado. */
             value={password}
             onChangeText={setPassword}
             style={styles.input}
@@ -319,7 +319,7 @@ export default function TabTwoScreen() {
               disabled durante el proceso para evitar envíos múltiples. */}
             <Pressable style={styles.primaryButton} onPress={handleSubmit} disabled={loadingSubmit}>
             {loadingSubmit ? (
-              // Spinner mientras se procesa la solicitud.
+              /* Spinner mientras se procesa la solicitud. */
                 <ActivityIndicator color="#fff" />
             ) : (
                 <Text style={styles.primaryButtonText}>
