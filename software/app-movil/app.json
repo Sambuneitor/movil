@@ -2,6 +2,7 @@
   "expo": {
     "name": "app-movil",
     "slug": "app-movil",
+    "scheme": "appmovil",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

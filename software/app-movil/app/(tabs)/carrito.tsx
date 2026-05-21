@@ -68,11 +68,11 @@ export default function CarritoScreen() {
 
     if (loading) {
         return (
-            <view style={styles.centered}>
+            <View style={styles.centered}>
                 {/* spinner cirvula color indigo*/}
                 <ActivityIndicator size="large" color="#6366f1"/>
-                <text style={styles.loadingText}>Cargando Carrito ....</text>
-            </view>
+                <Text style={styles.loadingText}>Cargando Carrito ....</Text>
+            </View>
         );
     }
 

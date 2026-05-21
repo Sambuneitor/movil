@@ -78,9 +78,9 @@ export default function HomeScreen() {
      * Estado de datos 
      * productos lista completa de productos traida del backend 
      */
-    const [productos, setProductos] = useState<any[]>([]);
+    const [productos, setProductos] = useState<Array<any>>([]);
     //categorias lista de categorias traida del backend
-    const [categorias, setCategorias] = useState<any[]>([]);
+    const [categorias, setCategorias] = useState<Array<any>>([]);
 
     //estado de UI
     //loading true mientras cargan los datos por primera vez
