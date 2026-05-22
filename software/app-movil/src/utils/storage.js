@@ -27,14 +27,16 @@ export async function storageGetItem(key) {
 }
 
 //guarda una clave en asyncstorage
+//si el valor no es string lo convierte a JSON
 //si no puede persistir la almacena en la memoria virtual
 export async function storageSetItem(key, value) {
+    const valueToStore = typeof value === 'string' ? value : JSON.stringify(value);
     const ok = await safeCall(async() => {
-        await AsyncStorage.setItem(key, value);
+        await AsyncStorage.setItem(key, valueToStore);
         return true;
     }, false);
     if (!ok) {
-        memoryStore.set(key, value);
+        memoryStore.set(key, valueToStore);
     }
 }
 

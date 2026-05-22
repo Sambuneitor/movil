@@ -41,7 +41,11 @@ const authService = {
     getSession: async () => {
         const token = await storageGetItem(STORAGE_KEYS.token);
         const userRaw = await storageGetItem(STORAGE_KEYS.user);
-        const user = userRaw ? JSON.parse(userRaw) : null;
+        const user = userRaw
+            ? typeof userRaw === 'string'
+                ? JSON.parse(userRaw)
+                : userRaw
+            : null;
         return { token, user };
     },
 
