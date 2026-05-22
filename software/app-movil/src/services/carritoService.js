@@ -62,8 +62,7 @@ const carritoService = {
         if (isAuthenticated) {
             const response = await apiClient.get('/cliente/carrito');
             const payload = response.data?.data || response.data || {};
-            const carrito = payload.carrito || {};
-            const items = carrito.items || carrito.items || [];
+            const items = payload.items || [];
             return summarize(items);
         }
 
@@ -138,7 +137,7 @@ const carritoService = {
 
     //migrar todos los items guardados localmente al carrito del backend despues que el usuario inicia sesion
 
-    mergelocalToBackend: async () => {
+    mergeLocalToBackend: async () => {
         const localItems = await readLocalCart();
         if (localItems.length === 0) {
             return;

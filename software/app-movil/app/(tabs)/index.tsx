@@ -21,7 +21,7 @@ import { useState, useEffect, useMemo } from 'react';
 //flatlist lista optomizada con virtualizacion para mostrar grandes cantidades de datos
 //modal mostrar detalles de contenido en ventana emergente
 
-import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, Image, RefreshControl, Pressable, ScrollView, StyleSheet, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, Dimensions, FlatList, Modal, Image, RefreshControl, Pressable, ScrollView, StyleSheet, TextInput, View, SafeAreaView } from "react-native";
 
 //Ionicons libreria de iconos vectoriales para react native 
 import { Ionicons } from "@expo/vector-icons";
@@ -135,6 +135,7 @@ export default function HomeScreen() {
             ]);
             //guarda los datos solo si son arrays
             setProductos(Array.isArray(productosData) ? productosData : []);
+            setCategorias(Array.isArray(categoriasData) ? categoriasData : []);
         } catch (error: unknown) {
             const msg = (error as { message?: string })?.message;
             setErrorMessage(msg || 'No fue posible cargar el catalogo');
@@ -202,9 +203,8 @@ export default function HomeScreen() {
     //prodcutos visibles subconjunto de productos de la pagina actual eje pagina 1 1-15 pagina 2 16-30 ....
     const productosVisibles = useMemo (() => productosFiltrados.slice((paginaActual -1) * ITEMS_POR_PAGINA, paginaActual * ITEMS_POR_PAGINA), [productosFiltrados, paginaActual, ITEMS_POR_PAGINA]);
 
-    // ── SUBCOMPONENTE: ListHeader ────────────────────────────────────────────
+  // ── SUBCOMPONENTE: ListHeader ────────────────────────────────────────────
   // Se renderiza UNA SOLA VEZ como cabecera fija del FlatList (encima de los productos).
-  // Contiene: Hero, Features, Buscador, Chips, Encabezado de sección y estados de carga/error.
     const ListHeader = () => (
     <>
       {/* ── HERO BANNER ─────────────────────────────────────────────────── */}
@@ -241,7 +241,7 @@ export default function HomeScreen() {
       {/* ScrollView horizontal: permite deslizar las tarjetas sin ocultar otras */}
         <ScrollView
         horizontal
-        showsHorizontalScrollIndicator={false} /* Oculta la barra de scroll horizontal. */
+        showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.featuresRow}>
         {/* Genera una tarjeta por cada entrada en FEATURES */}
         {FEATURES.map((f) => (
@@ -258,20 +258,19 @@ export default function HomeScreen() {
 
       {/* ── BUSCADOR ────────────────────────────────────────────────────── */}
         <View style={styles.searchContainer}>
-        <Ionicons name="search" size={18} color="#9ca3af" />
-        <TextInput
+          <Ionicons name="search" size={18} color="#9ca3af" />
+          <TextInput
             placeholder="Buscar productos..."
             value={busqueda}
-          onChangeText={setBusqueda}       /* Actualiza busqueda en cada keystroke. */
+            onChangeText={setBusqueda}
             style={styles.searchInput}
             placeholderTextColor="#9ca3af"
-        />
-        {/* Botón "X" para limpiar la búsqueda, solo visible cuando hay texto */}
-        {busqueda.length > 0 && (
+          />
+          {busqueda.length > 0 && (
             <Pressable onPress={() => setBusqueda('')}>
-            <Ionicons name="close-circle" size={18} color="#9ca3af" />
+              <Ionicons name="close-circle" size={18} color="#9ca3af" />
             </Pressable>
-        )}
+          )}
         </View>
 
       {/* ── CHIPS DE CATEGORÍAS ─────────────────────────────────────────── */}
@@ -293,7 +292,7 @@ export default function HomeScreen() {
         {categorias.map((cat: any) => (
             <Pressable
             key={cat.id}
-            onPress={() => setCategoriaActiva(String(cat.id))} /* Guarda el ID como string. */
+            onPress={() => setCategoriaActiva(String(cat.id))}
             style={[styles.chip, categoriaActiva === String(cat.id) && styles.chipActive]}>
             <ThemedText style={[styles.chipText, categoriaActiva === String(cat.id) && styles.chipTextActive]}>
                 {cat.nombre}
@@ -337,7 +336,7 @@ export default function HomeScreen() {
         {/* Botón "Anterior": desactivado en la primera página */}
         <Pressable
             style={[styles.pagBtn, paginaActual === 1 && styles.pagBtnDisabled]}
-          onPress={() => setPaginaActual((p) => Math.max(1, p - 1))} /* No baja de la página 1. */
+            onPress={() => setPaginaActual((p) => Math.max(1, p - 1))}
             disabled={paginaActual === 1}>
             <Ionicons name="chevron-back" size={15} color={paginaActual === 1 ? '#d1d5db' : '#6366f1'} />
             <ThemedText style={[styles.pagBtnText, paginaActual === 1 && styles.pagBtnTextDisabled]}>
@@ -351,7 +350,7 @@ export default function HomeScreen() {
         {/* Botón "Siguiente": desactivado en la última página */}
         <Pressable
             style={[styles.pagBtn, paginaActual === totalPaginas && styles.pagBtnDisabled]}
-          onPress={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))} /* No supera el total. */
+            onPress={() => setPaginaActual((p) => Math.min(totalPaginas, p + 1))}
             disabled={paginaActual === totalPaginas}>
             <ThemedText style={[styles.pagBtnText, paginaActual === totalPaginas && styles.pagBtnTextDisabled]}>
             Siguiente
@@ -447,72 +446,75 @@ export default function HomeScreen() {
         />
 
       {/* ── MODAL: DETALLE DEL PRODUCTO ─────────────────────────────────── */}
-      {/* visible: true cuando productoDetalle tiene datos (Boolean convierte a boolean). */}
-      {/* animationType="slide": el modal sube desde la parte inferior de la pantalla. */}
+      {/* Renderiza el modal solo si hay un producto seleccionado */}
+      {productoDetalle && (
         <Modal
-        visible={Boolean(productoDetalle)}
-        transparent /* El fondo semitransparente se ve detrás. */
-        animationType="slide"
-        onRequestClose={() => setProductoDetalle(null)}> {/* Cierra con el botón "atrás" de Android */}
-        {/* Fondo semitransparente negro que cubre toda la pantalla */}
-        <View style={styles.modalBackdrop}>
-          {/* Tarjeta blanca con esquinas superiores redondeadas */}
+          visible={true}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setProductoDetalle(null)}>
+          {/* Fondo semitransparente negro que cubre toda la pantalla */}
+          <View style={styles.modalBackdrop}>
+            {/* Tarjeta blanca con esquinas superiores redondeadas */}
             <ThemedView style={styles.modalCard}>
-            {/* Solo renderiza el contenido si productoDetalle tiene datos */}
-            {productoDetalle ? (
-                <>
+              {/* Contenido scrolleable */}
+              <ScrollView
+                scrollEnabled={true}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{ paddingBottom: 16 }}>
                 {/* Imagen grande del producto */}
                 <Image
-                    source={{ uri: catalogoService.buildImageUrl(productoDetalle.imagen) }}
-                    style={styles.modalImage}
-                    resizeMode="cover"
+                  source={{ uri: catalogoService.buildImageUrl(productoDetalle.imagen) }}
+                  style={styles.modalImage}
+                  resizeMode="cover"
                 />
-                {/* Categoría del producto en texto pequeño índigo */}
+                {/* Categoría del producto */}
                 <ThemedText style={styles.modalCategoria}>
-                    {productoDetalle.Categoria?.nombre || 'Sin categoría'}
+                  {productoDetalle.Categoria?.nombre || 'Sin categoría'}
                 </ThemedText>
-                {/* Nombre del producto en grande */}
-                <ThemedText style={styles.modalTitle}>{productoDetalle.nombre}</ThemedText>
-                {/* Descripción o texto fallback si no hay descripción */}
+                {/* Nombre del producto */}
+                <ThemedText style={styles.modalTitle}>
+                  {productoDetalle.nombre}
+                </ThemedText>
+                {/* Descripción */}
                 <ThemedText style={styles.modalDesc}>
-                    {productoDetalle.descripcion || 'Sin descripción disponible.'}
+                  {productoDetalle.descripcion || 'Sin descripción disponible.'}
                 </ThemedText>
-                {/* Precio formateado en pesos colombianos */}
+                {/* Precio */}
                 <ThemedText style={styles.modalPrecio}>
-                    ${Number(productoDetalle.precio || 0).toLocaleString('es-CO')}
+                  ${Number(productoDetalle.precio || 0).toLocaleString('es-CO')}
                 </ThemedText>
-                {/* Fila de stock disponible con ícono */}
+                {/* Stock */}
                 <View style={styles.modalStock}>
-                    <Ionicons name="cube-outline" size={14} color="#6b7280" />
-                    <ThemedText style={styles.modalStockText}>
-                    {/* ?? 'N/A': muestra N/A si stock es null o undefined */}
+                  <Ionicons name="cube-outline" size={14} color="#6b7280" />
+                  <ThemedText style={styles.modalStockText}>
                     Stock disponible: {productoDetalle.stock ?? 'N/A'} unidades
-                    </ThemedText>
+                  </ThemedText>
                 </View>
-                {/* Fila de botones del modal */}
-                <View style={styles.modalActions}>
-                  {/* Botón "Cerrar": cierra el modal limpiando productoDetalle */}
-                    <Pressable
-                    style={[styles.outlineBtn, { flex: 1, paddingVertical: 12 }]}
-                    onPress={() => setProductoDetalle(null)}>
-                    <ThemedText style={styles.outlineBtnText}>Cerrar</ThemedText>
-                    </Pressable>
-                  {/* Botón "Agregar al carrito": agrega y cierra el modal */}
-                    <Pressable
-                    style={[styles.primaryBtn, { flex: 2, paddingVertical: 12 }]}
-                    onPress={async () => {
-                      await handleAgregarAlCarrito(productoDetalle); // Agrega al carrito.
-                      setProductoDetalle(null);                      // Cierra el modal.
-                    }}>
-                    <Ionicons name="cart" size={16} color="#fff" />
-                    <ThemedText style={styles.primaryBtnText}>Agregar al carrito</ThemedText>
-                    </Pressable>
-                </View>
-                </>
-            ) : null}
+              </ScrollView>
+              {/* Fila de botones (fija al final) */}
+              <View style={styles.modalActions}>
+                <Pressable
+                  style={[styles.outlineBtn, { flex: 1, paddingVertical: 12 }]}
+                  onPress={() => setProductoDetalle(null)}>
+                  <ThemedText style={styles.outlineBtnText}>Cerrar</ThemedText>
+                </Pressable>
+                <Pressable
+                  style={[styles.primaryBtn, { flex: 2, paddingVertical: 12 }]}
+                  onPress={async () => {
+                    await handleAgregarAlCarrito(productoDetalle);
+                    setProductoDetalle(null);
+                  }}>
+                  <Ionicons name="cart" size={16} color="#fff" />
+                  <ThemedText style={styles.primaryBtnText}>
+                    Agregar al carrito
+                  </ThemedText>
+                </Pressable>
+              </View>
             </ThemedView>
-        </View>
+          </View>
         </Modal>
+      )}
     </>
     );
 }
