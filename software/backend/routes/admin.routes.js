@@ -101,14 +101,16 @@ router.get('/categorias/:id', categoriaController.getCategoriaById);
 router.get('/categorias/:id/stats', categoriaController.getEstadisticasCategoria);
 
 // POST /api/admin/categorias → Crea una nueva categoría
+// soloAdministrador → solo el administrador puede crear categorías
 // Body esperado: { nombre: "Electrónica", descripcion: "Productos electrónicos" }
 // Controlador: crearCategoria → hace Categoria.create(req.body)
-router.post('/categorias', categoriaController.crearCategoria);
+router.post('/categorias', soloAdministrador, categoriaController.crearCategoria);
 
 // PUT /api/admin/categorias/:id → Actualiza una categoría existente
+// soloAdministrador → solo el administrador puede actualizar categorías
 // Body esperado: { nombre: "Nuevo nombre", descripcion: "Nueva descripción" }
 // Controlador: actualizarCategoria → busca por PK y hace .update()
-router.put('/categorias/:id', categoriaController.actualizarCategoria);
+router.put('/categorias/:id', soloAdministrador, categoriaController.actualizarCategoria);
 
 // PATCH /api/admin/categorias/:id/toggle → Activa o desactiva una categoría
 // PATCH se usa para actualizaciones parciales (solo cambia el campo 'activo')

@@ -120,13 +120,15 @@ export default function AdminPedidoDetalleScreen() {
     const cambiarEstado = async (nuevoEstado: string) => {
         setCambiando(true); //bloquea los botones par evitar clicks multiples
         try {
-            //PATCH /admin/pedidos/:id/estado con le nuevo estado en el body
-            await apiClient.patch(`/admin/pedidos/${id}/estado`, { estado: nuevoEstado});
+            // PUT /admin/pedidos/:id/estado con el nuevo estado en el body
+            await apiClient.put(`/admin/pedidos/${id}/estado`, { estado: nuevoEstado });
+            // Recarga el pedido para mostrar el estado actualizado inmediatamente
+            await fetchPedido();
         } catch {
-            //si falla muestra un alert nativo con el mensaje de error
+            // si falla muestra un alert nativo con el mensaje de error
             Alert.alert('Error', 'No se pudo cambiar el estado');
         } finally {
-            setCambiando(false); //desbloquea los botones
+            setCambiando(false); // desbloquea los botones
         }
     };
 

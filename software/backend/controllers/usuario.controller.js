@@ -234,6 +234,7 @@ const actualizarUsuario = async (req, res) => {
     if (telefono !== undefined) usuario.telefono = telefono;
     if (direccion !== undefined) usuario.direccion = direccion;
     if (rol !== undefined) usuario.rol = rol;
+    if (req.body.activo !== undefined) usuario.activo = req.body.activo;
     
     // save() ejecuta UPDATE en la BD
     await usuario.save();

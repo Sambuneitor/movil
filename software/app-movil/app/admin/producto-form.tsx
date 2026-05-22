@@ -8,16 +8,17 @@
  */
 
 //manejo de variables de estado local
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 //importar componentes 
 //Dimensions optiene al ancho y alto de la pantalla para hacer diseños responsivos
 //flatlist lista optomizada con virtualizacion para mostrar grandes cantidades de datos
 //modal mostrar detalles de contenido en ventana emergente
 
-import { Alert, Button, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { Alert, Button, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
 
 //lee los parametros de la url para obtener el id del pedido 
 import { useLocalSearchParams, useRouter } from "expo-router"; //negacion y parametros de ruta 
+import apiClient from '../../src/api/apiClient';
 import { createProduct, updateProduct } from '../../src/services/adminService';
 /**
  * tipo de producto
@@ -31,6 +32,11 @@ type Producto = {
     precio?: number;
     stock?: number;
     imagen?: string;
+    activo?: boolean;
+    categoriaId?: number | string;
+    subcategoriaId?: number | string;
+    categoria?: { id?: number | string; nombre?: string };
+    subcategoria?: { id?: number | string; nombre?: string };
 };
 
 export default function AdminProductoForm() {
@@ -77,10 +83,38 @@ export default function AdminProductoForm() {
     const [nombre, setNombre] = useState(producto?.nombre ?? '');
     const [descripcion, setDescripcion] = useState(producto?.descripcion ?? '');
     //precio y stock se guardan como string para facilitar la entrada de texInput
-    const [precio, setPrecio] = useState(producto?.precio?.toString ?? '');
-    const [stock, setStock] = useState(producto?.stock?.toString ?? '');
+    const [precio, setPrecio] = useState(producto?.precio?.toString() ?? '');
+    const [stock, setStock] = useState(producto?.stock?.toString() ?? '');
     const [imagen, setImagen] = useState(producto?.imagen ?? '');
+    const [categoriaId, setCategoriaId] = useState(producto?.categoriaId?.toString?.() ?? producto?.categoria?.id?.toString?.() ?? '');
+    const [subcategoriaId, setSubcategoriaId] = useState(producto?.subcategoriaId?.toString?.() ?? producto?.subcategoria?.id?.toString?.() ?? '');
+    const [categorias, setCategorias] = useState<{ id?: number | string; nombre?: string; activo?: boolean }[]>([]);
+    const [subcategorias, setSubcategorias] = useState<{ id?: number | string; nombre?: string; categoriaId?: number | string; activo?: boolean }[]>([]);
     const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        const loadOptions = async () => {
+            try {
+                const [categoriaRes, subcategoriaRes] = await Promise.all([
+                    apiClient.get('/admin/categorias'),
+                    apiClient.get('/admin/subcategorias'),
+                ]);
+
+                setCategorias(categoriaRes.data?.data?.categorias || []);
+                setSubcategorias(subcategoriaRes.data?.data?.subcategorias || []);
+            } catch (error) {
+                console.warn('No se pudieron cargar categorías o subcategorías', error);
+            }
+        };
+
+        loadOptions();
+    }, []);
+
+    useEffect(() => {
+        if (!categoriaId) {
+            setSubcategoriaId('');
+        }
+    }, [categoriaId]);
 
     /**
      * funcion handleSubmit
@@ -88,36 +122,36 @@ export default function AdminProductoForm() {
      * y regresa a la pantalla anterior si fue exitoso
      */
     const handleSubmit = async () => {
-        //validacion basica los 4 campos obligatorios no pueden estar vacios
-        if (!nombre || !descripcion || !precio || !stock) {
-            Alert.alert('Error', 'Todos los campos obligatorios');
-            return; //
+        //validacion basica los campos obligatorios no pueden estar vacios
+        if (!nombre || !descripcion || !precio || !stock || !categoriaId || !subcategoriaId) {
+            Alert.alert('Error', 'Todos los campos obligatorios deben completarse');
+            return;
         }
 
         setLoading(true); //deshabilita el boton durante la peticion
         try {
-            //construye el objeto de datos covirtiendo precio y stock a numericos
-            const data = {
-                nombre,
-                descripcion,
-                precio: parseFloat(precio),
-                stock: parseInt(stock, 10),
-                imagen,
-            };
-
-            if(editing && producto) {
-                //modo edicion llama a updateProduct con el id del producto
-                //se usa id como fallback
-                await updateProduct(producto.id || producto.id, data);
-                Alert.alert('Exitoso', 'producto actualizado');
-            } else {
-                //cuando el formulario esta vacio se comporta como creacion
-                await createProduct(data);
-                Alert.alert('Exito', 'producto creado');
+            const formData = new FormData();
+            formData.append('nombre', nombre);
+            formData.append('descripcion', descripcion);
+            formData.append('precio', precio);
+            formData.append('stock', stock);
+            formData.append('categoriaId', categoriaId);
+            formData.append('subcategoriaId', subcategoriaId);
+            if (imagen) {
+                formData.append('imagen', imagen);
             }
+
+            if (editing && producto) {
+                await updateProduct(String(producto.id), formData);
+                Alert.alert('Exitoso', 'Producto actualizado');
+            } else {
+                await createProduct(formData);
+                Alert.alert('Exito', 'Producto creado');
+            }
+
             router.back(); //regresa a /admin/productos despues de guardar
-        } catch {
-            Alert.alert('Error', 'No se pudo guardar el producto');
+        } catch (error) {
+            Alert.alert('Error', error instanceof Error ? error.message : 'No se pudo guardar el producto');
         } finally {
             setLoading(false); //habilita el boton nuevamente
         }
@@ -162,6 +196,53 @@ export default function AdminProductoForm() {
         keyboardType="numeric"
       />
 
+      {/* ── CAMPO: Categoría ───────────────────────────────────────────── */}
+      <Text style={styles.label}>Categoría</Text>
+      {categorias.length ? (
+        <View style={styles.optionsContainer}>
+          {categorias.map((categoria) => (
+            <Pressable
+              key={String(categoria.id)}
+              style={[
+                styles.option,
+                categoriaId === String(categoria.id) && styles.optionSelected,
+              ]}
+              onPress={() => setCategoriaId(String(categoria.id))}
+            >
+              <Text style={styles.optionText}>{categoria.nombre}</Text>
+            </Pressable>
+          ))}
+        </View>
+      ) : (
+        <Text style={styles.helperText}>Cargando categorías...</Text>
+      )}
+
+      {/* ── CAMPO: Subcategoría ───────────────────────────────────────── */}
+      <Text style={styles.label}>Subcategoría</Text>
+      {categoriaId ? (
+        <View style={styles.optionsContainer}>
+          {subcategorias
+            .filter((sub) => String(sub.categoriaId) === String(categoriaId))
+            .map((subcategoria) => (
+              <Pressable
+                key={String(subcategoria.id)}
+                style={[
+                  styles.option,
+                  subcategoriaId === String(subcategoria.id) && styles.optionSelected,
+                ]}
+                onPress={() => setSubcategoriaId(String(subcategoria.id))}
+              >
+                <Text style={styles.optionText}>{subcategoria.nombre}</Text>
+              </Pressable>
+            ))}
+          {subcategorias.filter((sub) => String(sub.categoriaId) === String(categoriaId)).length === 0 && (
+            <Text style={styles.helperText}>No hay subcategorías activas para esta categoría.</Text>
+          )}
+        </View>
+      ) : (
+        <Text style={styles.helperText}>Selecciona una categoría primero.</Text>
+      )}
+
       {/* ── CAMPO: URL Imagen ───────────────────────────────────────────── */}
       <Text style={styles.label}>URL Imagen</Text>
       <TextInput
@@ -192,4 +273,9 @@ const styles = StyleSheet.create({
   label: { fontWeight: 'bold', marginTop: 10 },
   // Campo de texto: borde gris, esquinas ligeramente redondeadas, padding interior.
   input: { borderWidth: 1, borderColor: '#ccc', borderRadius: 5, padding: 8, marginTop: 5, marginBottom: 10 },
+  optionsContainer: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginTop: 5, marginBottom: 10 },
+  option: { paddingHorizontal: 10, paddingVertical: 8, borderWidth: 1, borderColor: '#ccc', borderRadius: 8, backgroundColor: '#f9fafb' },
+  optionSelected: { borderColor: '#2563eb', backgroundColor: '#dbeafe' },
+  optionText: { color: '#111' },
+  helperText: { color: '#6b7280', marginTop: 6, marginBottom: 10 },
 });

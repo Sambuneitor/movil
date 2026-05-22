@@ -248,7 +248,7 @@ const crearProducto = async (req, res) => {
     
     // Si se subió una imagen, Multer la guarda en uploads/ y pone los datos en req.file.
     // req.file.filename es el nombre generado por Multer (ej: "producto_1719344567890_abc12.jpg")
-    const imagen = req.file ? req.file.filename : null;
+    const imagen = req.file ? req.file.filename : req.body.imagen || null;
     
     // Crea el registro en la tabla Producto (INSERT INTO Producto ...)
     const nuevoProducto = await Producto.create({
@@ -393,6 +393,8 @@ const actualizarProducto = async (req, res) => {
       }
       // Asigna el nombre de la nueva imagen
       producto.imagen = req.file.filename;
+    } else if (req.body.imagen !== undefined) {
+      producto.imagen = req.body.imagen;
     }
     
     // Actualiza SOLO los campos que se enviaron (si no se envían, no cambian)

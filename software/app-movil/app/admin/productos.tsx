@@ -21,6 +21,7 @@ import { ActivityIndicator, Alert, FlatList, Image, Pressable,ScrollView, StyleS
 import { router } from "expo-router"; //negacion y parametros de ruta 
 import { ThemedText } from '../../components/themed-text';
 import  apiClient  from '../../src/api/apiClient';
+import catalogoService from '../../src/services/catalogoService';
 import { activarProducto, desactivarProducto, deleteProduct, } from '../../src/services/adminService';
 import { useAuth } from '../../src/context/AuthContext'
 /**
@@ -159,7 +160,7 @@ export default function AdminProductosScreen() {
             >
               {/* Miniatura del producto. Si no tiene imagen usa un placeholder externo. */}
               <Image
-                source={{ uri: item.imagen ? `http://10.0.2.2:5000/${item.imagen}` : 'https://via.placeholder.com/70' }}
+                source={{ uri: catalogoService.buildImageUrl(item.imagen) }}
                 style={styles.image}
               />
               <View style={styles.cardBody}>

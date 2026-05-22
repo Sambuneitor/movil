@@ -135,7 +135,7 @@ export default function AdminDashboardScreen() {
   // El campo 'show' controla si la tarjeta se renderiza o no.
   // La tarjeta de 'Usuarios' solo se muestra a administradores (show: isAdmin).
 const cards: StatCard[] = [
-    { title: 'Categorías',    value: stats.categorias,    icon: 'folder-outline',      gradient: ['#667eea', '#764ba2'], route: '/admin/productos', show: true },
+    { title: 'Categorías',    value: stats.categorias,    icon: 'folder-outline',      gradient: ['#667eea', '#764ba2'], route: '/admin/categorias', show: true },
     { title: 'Subcategorías', value: stats.subcategorias, icon: 'folder-open-outline', gradient: ['#06b6d4', '#0891b2'], route: '/admin/productos', show: true },
     { title: 'Productos',     value: stats.productos,     icon: 'cube-outline',        gradient: ['#10b981', '#059669'], route: '/admin/productos', show: true },
     { title: 'Usuarios',      value: stats.usuarios,      icon: 'people-outline',      gradient: ['#f59e0b', '#d97706'], route: '/admin/usuarios',  show: isAdmin }, // Solo admin.
@@ -236,8 +236,8 @@ const fmt = (n: number) => `$${Number(n).toLocaleString('es-CO')}`;
             <Ionicons name="add-circle-outline" size={18} color="#6366f1" />
             <Text style={[styles.actionText, { color: '#6366f1' }]}>Agregar Producto</Text>
           </Pressable>
-          {/* Botón: Agregar Categoría → también va a /admin/productos donde se gestionan (verde) */}
-          <Pressable style={[styles.actionBtn, { borderColor: '#10b981' }]} onPress={() => push('/admin/productos')}>
+          {/* Botón: Agregar Categoría → va a /admin/categorias (verde) */}
+          <Pressable style={[styles.actionBtn, { borderColor: '#10b981' }]} onPress={() => push('/admin/categorias')}>
             <Ionicons name="add-circle-outline" size={18} color="#10b981" />
             <Text style={[styles.actionText, { color: '#10b981' }]}>Agregar Categoría</Text>
           </Pressable>

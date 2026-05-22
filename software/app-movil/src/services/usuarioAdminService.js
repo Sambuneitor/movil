@@ -5,19 +5,18 @@
 
 import api from "../api/apiClient";
 
-//activa un usuario
+// activa o desactiva un usuario usando la ruta de toggle del backend
 export async function activarUsuario(id) {
-    const res = await api.patch(`/admin/usuarios/${id}/activar`);
+    const res = await api.patch(`/admin/usuarios/${id}/toggle`);
     return res.data;
 }
 
-//desactiva usuario
 export async function desactivarUsuario(id) {
-    const res = await api.patch(`/admin/usuarios/${id}/desactivar`);
+    const res = await api.patch(`/admin/usuarios/${id}/toggle`);
     return res.data;
 }
 
-//elimina un usuario
+// elimina un usuario
 export async function deleteUsuario(id) {
     const res = await api.delete(`/admin/usuarios/${id}`);
     return res.data;

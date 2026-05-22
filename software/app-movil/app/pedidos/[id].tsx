@@ -27,6 +27,7 @@ import { router, useLocalSearchParams } from "expo-router";
 //themedText : texto q aplica colores del tema del dispositivo de manera automatica claro u oscuro
 import { ThemedText } from "../../components/themed-text";
 import { ThemedView } from "../../components/themed-view";
+import catalogoService from '../../src/services/catalogoService';
 //cliente http axios con JWT
 import pedidoService from '../../src/services/pedidoService';
 type ProductoDetalle = {
@@ -213,9 +214,7 @@ type Detalle = {
         // Soporta nombre producto/Producto dependiendo del origen de datos.
         const producto = detalle.producto || detalle.Producto || {};
         // Si no existe imagen en backend, usa placeholder para evitar imagen rota.
-        const imagen = producto.imagen
-          ? `http://10.0.2.2:5000/${producto.imagen}`
-          : 'https://via.placeholder.com/90';
+        const imagen = catalogoService.buildImageUrl(producto.imagen);
 
         return (
           <ThemedView key={detalle.id} style={styles.itemCard}>

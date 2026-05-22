@@ -6,15 +6,35 @@
 
 import api from '../api/apiClient';
 
+const buildFormData = (data) => {
+    if (data instanceof FormData) {
+        return data;
+    }
+
+    const formData = new FormData();
+    Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+            formData.append(key, String(value));
+        }
+    });
+    return formData;
+};
+
 //crea un producto en el backend usando el payload del formulario del admin
 export async function createProduct(data) {
-    const res = await api.post('/admin/productos', data);
+    const formData = buildFormData(data);
+    const res = await api.post('/admin/productos', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return res.data;
 }
 
 //actualiza un producto
 export async function updateProduct(id, data) {
-    const res = await api.put(`/admin/productos/${id}`, data);
+    const formData = buildFormData(data);
+    const res = await api.put(`/admin/productos/${id}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+    });
     return res.data;
 }
 

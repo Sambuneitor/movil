@@ -18,6 +18,7 @@ import { ActivityIndicator, ActivityIndicatorBase, Alert, Image, Pressable, Scro
 import { router } from "expo-router";
 //Ionicons libreria de iconos vectoriales para react native 
 import { Ionicons } from "@expo/vector-icons";
+import catalogoService from '../../src/services/catalogoService';
 import { useAuth } from '../../src/context/AuthContext';
 import { useCarrito } from '../../src/context/CarritoContext';
 
@@ -191,7 +192,7 @@ export default function CarritoScreen() {
                     {/* Imagen del producto. Si no tiene imagen, usa un placeholder genérico.
                       La URL apunta al servidor backend local (10.0.2.2 = localhost en emulador Android) */}
                     <Image
-                    source={{ uri: item.imagen ? `http://10.0.2.2:5000/${item.imagen}` : 'https://via.placeholder.com/70' }}
+                    source={{ uri: catalogoService.buildImageUrl(item.imagen) }}
                     style={styles.image}
                 />
 
