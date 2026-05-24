@@ -71,7 +71,7 @@ type Detalle = {
             return '-';
         }
 
-        return new Date(value).toLocaleDateString('es_CO', {
+        return new Date(value).toLocaleDateString('es-CO', {
             year: 'numeric',
             month: 'short',
             day: 'numeric',
@@ -113,7 +113,7 @@ type Detalle = {
         //efecto de carga de pedido
         //se ejecuta cuando el id cambia en la ruta 
         useEffect(() => {
-            if (pedidoId) {
+            if (!pedidoId) {
                 setLoading(false);
                 setErrorMessage('Pedido invalido');
                 return;

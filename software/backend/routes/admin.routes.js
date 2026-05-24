@@ -101,10 +101,10 @@ router.get('/categorias/:id', categoriaController.getCategoriaById);
 router.get('/categorias/:id/stats', categoriaController.getEstadisticasCategoria);
 
 // POST /api/admin/categorias → Crea una nueva categoría
-// soloAdministrador → solo el administrador puede crear categorías
+// esAdminOAuxiliar → administradores y auxiliares pueden crear categorías
 // Body esperado: { nombre: "Electrónica", descripcion: "Productos electrónicos" }
 // Controlador: crearCategoria → hace Categoria.create(req.body)
-router.post('/categorias', soloAdministrador, categoriaController.crearCategoria);
+router.post('/categorias', esAdminOAuxiliar, categoriaController.crearCategoria);
 
 // PUT /api/admin/categorias/:id → Actualiza una categoría existente
 // soloAdministrador → solo el administrador puede actualizar categorías

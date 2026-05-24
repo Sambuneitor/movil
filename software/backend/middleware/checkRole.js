@@ -37,7 +37,7 @@ const esAdministrador = (req, res, next) => {
     
     // Verifica que el rol del usuario sea exactamente 'administrador'
     // req.usuario.rol viene de la columna 'rol' de la tabla Usuario en la BD
-    if (req.usuario.rol !== 'administrador') {
+    if (req.usuario.rol?.toLowerCase() !== 'administrador') {
       return res.status(403).json({    // 403 = Prohibido (no tiene permisos)
         success: false,
         message: 'Acceso denegado. Se requieren permisos de administrador'
@@ -77,7 +77,7 @@ const esCliente = (req, res, next) => {
     }
     
     // Verifica que el rol sea exactamente 'cliente'
-    if (req.usuario.rol !== 'cliente') {
+    if (req.usuario.rol?.toLowerCase() !== 'cliente') {
       return res.status(403).json({    // 403 = Tiene sesión pero no es cliente
         success: false,
         message: 'Acceso denegado. Esta función es solo para clientes'
@@ -218,7 +218,8 @@ const esAdminOAuxiliar = (req, res, next) => {
     }
     
     // includes() verifica si el rol está en el array ['administrador', 'auxiliar']
-    if (!['administrador', 'auxiliar'].includes(req.usuario.rol)) {
+    const rolNormalizado = req.usuario.rol?.toLowerCase();
+    if (!['administrador', 'auxiliar'].includes(rolNormalizado)) {
       return res.status(403).json({
         success: false,
         message: 'Acceso denegado. Se requieren permisos de administrador o auxiliar'
@@ -258,7 +259,7 @@ const soloAdministrador = (req, res, next) => {
     }
     
     // Verifica que sea EXACTAMENTE 'administrador' (no auxiliar, no cliente)
-    if (req.usuario.rol !== 'administrador') {
+    if (req.usuario.rol?.toLowerCase() !== 'administrador') {
       return res.status(403).json({
         success: false,
         message: 'Acceso denegado. Solo administradores pueden realizar esta operación'
