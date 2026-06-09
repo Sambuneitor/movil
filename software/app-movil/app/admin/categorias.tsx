@@ -144,20 +144,8 @@ export default function AdminCategoriasScreen() {
                                 <Pressable
                                     style={[styles.actionBtn, { backgroundColor: '#b93a32' }]}
                                     onPress={() => {
-                                        Alert.alert('Eliminar categoría', '¿Está seguro de eliminar esta categoría?', [
+                                        Alert.alert('Accion denegada', 'No puedes eliminar una catregoria desde la app', [
                                             { text: 'Cancelar', style: 'cancel' },
-                                            {
-                                                text: 'Eliminar',
-                                                style: 'destructive',
-                                                onPress: async () => {
-                                                    try {
-                                                        await apiClient.delete(`/admin/categorias/${item.id}`);
-                                                        fetchCategorias(busqueda);
-                                                    } catch {
-                                                        Alert.alert('Error', 'No se pudo eliminar la categoría');
-                                                    }
-                                                },
-                                            },
                                         ]);
                                     }}
                                 >
